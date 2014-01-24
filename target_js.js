@@ -6,16 +6,12 @@
 
 window.onload = function() {
   
-    // var numBalls = 2;
-    // var maxSize = 8;
-    // var minSize = 5;
-    // var maxSpeed = maxSize + 20;
-    // var balls = [];
-    // var radius = 24;
-
-    setupGame();
-
-    // this is a custom Kinetic.Shape
+    var maxSize = 8;
+    var minSize = 5;
+    var maxSpeed = maxSize + 20;
+    var balls = [];
+    var radius = 24;
+    var numBalls = 2;
     var shape;
     var text;
     var attempts = 0;
@@ -24,23 +20,7 @@ window.onload = function() {
     var backLayer;
     var hit = false;
 
-    // for (var i = 0; i < numBalls; i++) {
-    //     var speed = maxSpeed - radius;
-    //     var angle = Math.floor(Math.random() * 360);
-    //     var radians = angle * Math.PI / 180;
-    //     var ball = {
-    //         x: (cw - radius) / 2,
-    //         y: (ch - radius) / 2,
-    //         radius: radius,
-    //         speed: speed,
-    //         angle: angle,
-    //         xunits: Math.cos(radians) * speed,
-    //         yunits: Math.sin(radians) * speed
-    //     }
-
-       
-    //     balls.push(ball);
-    // }
+    setupGame();
 
     // load the ball image and create the Kinetic.Shape
     function mouseDownTrigger() {
@@ -49,9 +29,7 @@ window.onload = function() {
 
     function gameLoop() {
         window.requestAnimationFrame(gameLoop);
-        backLayer.clear();
-        shape.draw();
-        text.draw();
+        backLayer.draw();
     }
 
     function restartGame(){
@@ -61,7 +39,6 @@ window.onload = function() {
     }
 
     function setupGame(){
-        alert('pool');
         stage = new Kinetic.Stage({
             container: 'container',
             width: 1024,
@@ -70,26 +47,45 @@ window.onload = function() {
 
         backLayer = new Kinetic.Layer();
 
-         text = new Kinetic.Text({
-                x: 10,
-                y: 10,
-                fontFamily: 'Calibri',
-                fontSize: 24,
-                text: 'Score: 0',
-                fill: 'black'
-            });
+        text = new Kinetic.Text({
+            x: 10,
+            y: 10,
+            fontFamily: 'Calibri',
+            fontSize: 24,
+            text: 'Score: 0',
+            fill: 'black'
+        });
 
-        for(var i = 1; i < 2; i++){
+        for (var i = 0; i < numBalls; i++) {
+            var speed = maxSpeed - radius;
+            var x = Math.floor((Math.random()*1024)+1);
+            var y = Math.floor((Math.random()*1000)+1);
+            var angle = Math.floor(Math.random() * 360);
+            var radians = angle * Math.PI / 180;
+            var ball = {
+                x: x,
+                y: y,
+                radius: radius,
+                speed: speed,
+                angle: angle,
+                xunits: Math.cos(radians) * speed,
+                yunits: Math.sin(radians) * speed
+            };
+            balls.push(ball);
+        }        
+
+        for(var i = 0; i < balls.length; i++){
             (function() {
-                shape = new Kinetic.Shape({
-            
+                var x = balls[i].x;
+                var y = balls[i].y;
+                var shape = new Kinetic.Shape({
                     sceneFunc: function (context) {
 
                         context.beginPath();
                         context.fillStyle="#0000ff";
-                    
+                
                         // Draws a circle of radius 20 at the coordinates 100,100 on the canvas
-                        context.arc(100,100,20,0,Math.PI*2,true); 
+                        context.arc(x,y,100,0,Math.PI*2,true); 
                         context.closePath();
                         context.fill();
                    
@@ -112,6 +108,7 @@ window.onload = function() {
                     fill: '#00D2AF',
                     stroke: 'black',
                     strokeWidth: 4,
+                    draggable:true,
                     name:'shape'
                 });
       
