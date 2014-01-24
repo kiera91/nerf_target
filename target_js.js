@@ -35,6 +35,8 @@ window.onload = function() {
     function restartGame(){
         score = 0;
         attempts = 0;
+        stage.removeChildren();
+        balls=[];
         setupGame();
     }
 
@@ -116,12 +118,14 @@ window.onload = function() {
                     mouseDownTrigger();
                 });
       
-                backLayer.add(text);
+                
                 backLayer.add(shape);
-                stage.add(backLayer);
+                
             }());
-
-        
+     
+        }
+            backLayer.add(text);
+            stage.add(backLayer);
             stage.getContent().addEventListener('mousedown', function(e) {
                    
                 attempts+=1;
@@ -138,9 +142,7 @@ window.onload = function() {
                 {
                     restartGame();
                 }
-            });          
-        }
-
+            });     
         // GO!
     gameLoop();
     }
