@@ -4,6 +4,8 @@
 
 */
 
+var paused = false;
+
 window.onload = function() {
   
     var maxSize = 8;
@@ -19,6 +21,8 @@ window.onload = function() {
     var stage;
     var backLayer;
     var hit = false;
+    var screenwidth = $( window ).width();
+    var screenheight = $( window ).height();
 
     setupGame();
 
@@ -41,10 +45,11 @@ window.onload = function() {
     }
 
     function setupGame(){
+
         stage = new Kinetic.Stage({
             container: 'container',
-            width: 1024,
-            height: 1000,
+            width: screenwidth,
+            height: screenheight,
         });
 
         backLayer = new Kinetic.Layer();
@@ -60,8 +65,8 @@ window.onload = function() {
 
         for (var i = 0; i < numBalls; i++) {
             var speed = maxSpeed - radius;
-            var x = Math.floor((Math.random()*1024)+1);
-            var y = Math.floor((Math.random()*1000)+1);
+            var x = Math.floor((Math.random()*screenwidth)+1);
+            var y = Math.floor((Math.random()*screenheight)+1);
             var angle = Math.floor(Math.random() * 360);
             var radians = angle * Math.PI / 180;
             var ball = {
@@ -128,22 +133,38 @@ window.onload = function() {
             stage.add(backLayer);
             stage.getContent().addEventListener('mousedown', function(e) {
                    
-                attempts+=1;
-
-                if(hit == true)
+                if(!paused)
                 {
-                    hit = false;
-                    score+=1;
-                    text.setText('Score: ' + score);
-                    backLayer.draw();
-                }
+                    attempts+=1;
 
-                if(attempts == 3)
-                {
-                    restartGame();
+                    if(hit == true)
+                    {
+                        hit = false;
+                        score+=1;
+                        text.setText('Score: ' + score);
+                        backLayer.draw();
+                    }
+
+                    if(attempts == 3)
+                    {
+                        restartGame();
+                    }
                 }
+                
             });     
         // GO!
     gameLoop();
     }
+}
+function setPaused()
+{
+    if(paused){
+        paused = false;
+        $('#paused').prop('value', 'Pause Game');;
+    }
+    else{
+        paused = true;
+        $('#paused').prop('value', 'Carry On');
+    }
+        
 }
