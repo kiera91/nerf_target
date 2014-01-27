@@ -150,6 +150,9 @@ window.onload = function() {
                         restartGame();
                     }
                 }
+                else{
+                    hit = false;
+                }
                 
             });     
         // GO!
