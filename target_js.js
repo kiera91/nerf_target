@@ -13,7 +13,7 @@ window.onload = function() {
     var maxSpeed = maxSize + 20;
     var balls = [];
     var radius = 24;
-    var numBalls = 2;
+    var numBalls = 3 nn;
     var shape;
     var text;
     var attempts = 0;
@@ -42,6 +42,12 @@ window.onload = function() {
         stage.removeChildren();
         balls=[];
         setupGame();
+    }
+
+    function playAudio(audiofile)
+    {
+        var sound = new Audio("../sounds/" + audiofile);
+        sound.play();
     }
 
     function setupGame(){
@@ -147,6 +153,14 @@ window.onload = function() {
 
                     if(attempts == 3)
                     {
+                        if(score == 3)
+                        {
+                            playAudio("topscore.ogg");
+                        }
+                        else if(score == 0){
+                            playAudio("nooooooo.ogg");
+                        }
+
                         restartGame();
                     }
                 }
