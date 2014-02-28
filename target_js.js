@@ -5,6 +5,9 @@
 */
 
 var paused = false;
+// Array to store x pos to stop overlap
+var xPosition = [];
+
 
 window.onload = function() {
   
@@ -13,7 +16,7 @@ window.onload = function() {
     var maxSpeed = maxSize + 20;
     var balls = [];
     var radius = 24;
-    var numBalls = 3 nn;
+    var numBalls = 3;
     var shape;
     var text;
     var attempts = 0;
@@ -46,7 +49,8 @@ window.onload = function() {
 
     function playAudio(audiofile)
     {
-        var sound = new Audio("../sounds/" + audiofile);
+        var sound = new Audio("sounds/" + audiofile);
+        console.log(sound);
         sound.play();
     }
 
@@ -71,8 +75,14 @@ window.onload = function() {
 
         for (var i = 0; i < numBalls; i++) {
             var speed = maxSpeed - radius;
-            var x = Math.floor((Math.random()*screenwidth)+1);
-            var y = Math.floor((Math.random()*screenheight)+1);
+            console.log(screenwidth)
+            console.log(screenheight)
+            var x = Math.floor(Math.random()*((screenwidth-100) - 100)+100);
+            checkOverlap(x);
+            xPosition[i] = x;
+            var y = Math.floor(Math.random()*((screenheight-100) - 100)+100);
+            console.log("x: " + x);
+            console.log("y: " + y);
             var angle = Math.floor(Math.random() * 360);
             var radians = angle * Math.PI / 180;
             var ball = {
@@ -158,7 +168,8 @@ window.onload = function() {
                             playAudio("topscore.ogg");
                         }
                         else if(score == 0){
-                            playAudio("nooooooo.ogg");
+                            console.log('nooooo');
+                            playAudio("nooo.ogg");
                         }
 
                         restartGame();
@@ -184,4 +195,17 @@ function setPaused()
         $('#paused').prop('value', 'Carry On');
     }
         
+}
+
+function checkOverlap(current)
+{
+    $.each(xPosition, function(index, value){
+        value=parseInt(value);
+        if(current <= value+100 || current >= value-100)
+        {
+            console.log('current: ' + current)
+            console.log('value: ' + value + " " + value+100)
+            console.log('OVERLAP');
+        }
+    });
 }
