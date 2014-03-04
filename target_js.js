@@ -79,8 +79,7 @@ window.onload = function() {
             checkOverlap(x);
             xPosition[i] = x;
             var y = Math.floor(Math.random()*((screenheight-100) - 100)+100);
-            //console.log("x: " + x);
-            //console.log("y: " + y);
+            
             var angle = Math.floor(Math.random() * 360);
             var radians = angle * Math.PI / 180;
             var ball = {
@@ -97,39 +96,32 @@ window.onload = function() {
 
         for(var i = 0; i < balls.length; i++)
         {
-            console.log("1: " + i);
-           // (function() {
+            var myInt = i;
+            (function() {
                 var x = balls[i].x;
                 var y = balls[i].y;
-                console.log("1.5 " + i);
                 var shape = new Kinetic.Shape({
                     sceneFunc: function (context) {
-                        console.log("2: " + i);
-
-                        console.log("3: " + i);
+                        var ball;
+                        ball = balls[myInt];
                         context.beginPath();
                         context.fillStyle="#0000ff";
-                
+
                         // Draws a circle of radius 20 at the coordinates 100,100 on the canvas
                         context.arc(x,y,100,0,Math.PI*2,true); 
                         context.closePath();
                         context.fill();
-                   
-                        var ball;
-                        ball = balls[i];
-                        console.log(i);
-                        console.log(balls);
+                                          
                         ball.x += ball.xunits;
                         ball.y += ball.yunits;
-                        if (ball.x + ball.radius * 2 > cw || ball.x < 0) {
+                        if (ball.x + ball.radius * 2 > screenwidth || ball.x < 0) {
                             ball.angle = 180 - ball.angle;
-                        } else if (ball.y + ball.radius * 2 > ch || ball.y < 0) {
+                        } else if (ball.y + ball.radius * 2 > screenheight || ball.y < 0) {
                             ball.angle = 360 - ball.angle;
                         }
                         ball.radians = ball.angle * Math.PI / 180;
                         ball.xunits = Math.cos(ball.radians) * ball.speed;
                         ball.yunits = Math.sin(ball.radians) * ball.speed;
-                        
                         context.closePath();
                         context.fillStrokeShape(this);
                     },
@@ -140,16 +132,12 @@ window.onload = function() {
                     draggable:true,
                     name:'shape'
                 });
-                setTimeout(1000000)
+
                 shape.on('mousedown', function() {
                     mouseDownTrigger();
                 });
-      
-                console.log("done")
                 backLayer.add(shape);
-                
-          //  }());
-     
+            }());     
         }
             backLayer.add(text);
             stage.add(backLayer);
@@ -177,7 +165,6 @@ window.onload = function() {
                             console.log('nooooo');
                             playAudio("nooo.ogg");
                         }
-
                         restartGame();
                     }
                 }
@@ -187,9 +174,10 @@ window.onload = function() {
                 
             });     
         // GO!
-    gameLoop();
+        gameLoop();
     }
 }
+
 function setPaused()
 {
     if(paused){
