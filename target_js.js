@@ -75,8 +75,7 @@ window.onload = function() {
 
         for (var i = 0; i < numBalls; i++) {
             var speed = maxSpeed - radius;
-            console.log(screenwidth)
-            console.log(screenheight)
+           
             var x = Math.floor(Math.random()*((screenwidth-100) - 100)+100);
             checkOverlap(x);
             xPosition[i] = x;
@@ -181,9 +180,10 @@ window.onload = function() {
                 
             });     
         // GO!
-    gameLoop();
+        gameLoop();
     }
 }
+
 function setPaused()
 {
     if(paused){
@@ -199,12 +199,14 @@ function setPaused()
 
 function checkOverlap(current)
 {
+    console.log("current1: " + current)
     $.each(xPosition, function(index, value){
-        value=parseInt(value);
-        if(current <= value+100 || current >= value-100)
+        value = value + 100;
+        console.log("v: " + value)
+        value1 = value - 100;
+        if(current <= value && current >= value1)
         {
             console.log('current: ' + current)
-            console.log('value: ' + value + " " + value+100)
             console.log('OVERLAP');
         }
     });
