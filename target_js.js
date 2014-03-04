@@ -16,7 +16,7 @@ window.onload = function() {
     var maxSpeed = maxSize + 20;
     var balls = [];
     var radius = 24;
-    var numBalls = 3;
+    var numBalls = 1;
     var shape;
     var text;
     var attempts = 0;
@@ -75,14 +75,12 @@ window.onload = function() {
 
         for (var i = 0; i < numBalls; i++) {
             var speed = maxSpeed - radius;
-            console.log(screenwidth)
-            console.log(screenheight)
             var x = Math.floor(Math.random()*((screenwidth-100) - 100)+100);
             checkOverlap(x);
             xPosition[i] = x;
             var y = Math.floor(Math.random()*((screenheight-100) - 100)+100);
-            console.log("x: " + x);
-            console.log("y: " + y);
+            //console.log("x: " + x);
+            //console.log("y: " + y);
             var angle = Math.floor(Math.random() * 360);
             var radians = angle * Math.PI / 180;
             var ball = {
@@ -97,13 +95,18 @@ window.onload = function() {
             balls.push(ball);
         }        
 
-        for(var i = 0; i < balls.length; i++){
-            (function() {
+        for(var i = 0; i < balls.length; i++)
+        {
+            console.log("1: " + i);
+           // (function() {
                 var x = balls[i].x;
                 var y = balls[i].y;
+                console.log("1.5 " + i);
                 var shape = new Kinetic.Shape({
                     sceneFunc: function (context) {
+                        console.log("2: " + i);
 
+                        console.log("3: " + i);
                         context.beginPath();
                         context.fillStyle="#0000ff";
                 
@@ -112,18 +115,21 @@ window.onload = function() {
                         context.closePath();
                         context.fill();
                    
-                        // var ball;
-                        //     ball = balls[i];
-                        //     ball.x += ball.xunits;
-                        //     ball.y += ball.yunits;
-                        //     if (ball.x + ball.radius * 2 > cw || ball.x < 0) {
-                        //         ball.angle = 180 - ball.angle;
-                        //     } else if (ball.y + ball.radius * 2 > ch || ball.y < 0) {
-                        //         ball.angle = 360 - ball.angle;
-                        //     }
-                        //     ball.radians = ball.angle * Math.PI / 180;
-                        //     ball.xunits = Math.cos(ball.radians) * ball.speed;
-                        //     ball.yunits = Math.sin(ball.radians) * ball.speed;
+                        var ball;
+                        ball = balls[i];
+                        console.log(i);
+                        console.log(balls);
+                        ball.x += ball.xunits;
+                        ball.y += ball.yunits;
+                        if (ball.x + ball.radius * 2 > cw || ball.x < 0) {
+                            ball.angle = 180 - ball.angle;
+                        } else if (ball.y + ball.radius * 2 > ch || ball.y < 0) {
+                            ball.angle = 360 - ball.angle;
+                        }
+                        ball.radians = ball.angle * Math.PI / 180;
+                        ball.xunits = Math.cos(ball.radians) * ball.speed;
+                        ball.yunits = Math.sin(ball.radians) * ball.speed;
+                        
                         context.closePath();
                         context.fillStrokeShape(this);
                     },
@@ -134,15 +140,15 @@ window.onload = function() {
                     draggable:true,
                     name:'shape'
                 });
-      
+                setTimeout(1000000)
                 shape.on('mousedown', function() {
                     mouseDownTrigger();
                 });
       
-                
+                console.log("done")
                 backLayer.add(shape);
                 
-            }());
+          //  }());
      
         }
             backLayer.add(text);
