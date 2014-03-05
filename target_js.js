@@ -13,15 +13,16 @@ window.onload = function() {
   
     var maxSize = 8;
     var minSize = 5;
-    var maxSpeed = maxSize + 20;
+    var maxSpeed = maxSize + 10;
     var balls = [];
     var radius = 24;
-    var numBalls = 1;
+    var numBalls = 3;
     var shape;
     var text;
     var attempts = 0;
     var score = 0;
     var stage;
+    var shape;
     var backLayer;
     var hit = false;
     var screenwidth = $( window ).width();
@@ -36,6 +37,8 @@ window.onload = function() {
 
     function gameLoop() {
         window.requestAnimationFrame(gameLoop);
+        backLayer.clear();
+        shape.draw();
         backLayer.draw();
     }
 
@@ -45,6 +48,7 @@ window.onload = function() {
         stage.removeChildren();
         balls=[];
         setupGame();
+        maxSpeed=1;
     }
 
     function playAudio(audiofile)
@@ -55,6 +59,7 @@ window.onload = function() {
     }
 
     function setupGame(){
+    console.log(maxSpeed)
 
         stage = new Kinetic.Stage({
             container: 'container',
@@ -63,6 +68,7 @@ window.onload = function() {
         });
 
         backLayer = new Kinetic.Layer();
+        stage.add(backLayer);
 
         text = new Kinetic.Text({
             x: 10,
@@ -94,16 +100,23 @@ window.onload = function() {
             balls.push(ball);
         }        
 
-        for(var i = 0; i < balls.length; i++)
-        {
-            var myInt = i;
-            (function() {
-                var x = balls[i].x;
-                var y = balls[i].y;
-                var shape = new Kinetic.Shape({
-                    sceneFunc: function (context) {
-                        var ball;
+        
+        shape = new Kinetic.Shape({
+            opacity: 0.8,
+            fill: '#00D2AF',
+            stroke: 'black',
+            strokeWidth: 4,
+            draggable:true,
+            name:'shape',
+            drawFunc: function (context) {
+                var ball;
+                for(var i = 0; i < balls.length; i++)
+                {
+                    var myInt = i;
+                    // (function() {
                         ball = balls[myInt];
+                        var x = balls[myInt].x;
+                        var y = balls[myInt].y;
                         context.beginPath();
                         context.fillStyle="#0000ff";
 
@@ -123,56 +136,50 @@ window.onload = function() {
                         ball.xunits = Math.cos(ball.radians) * ball.speed;
                         ball.yunits = Math.sin(ball.radians) * ball.speed;
                         context.closePath();
+                }
                         context.fillStrokeShape(this);
-                    },
-                    opacity: 0.8,
-                    fill: '#00D2AF',
-                    stroke: 'black',
-                    strokeWidth: 4,
-                    draggable:true,
-                    name:'shape'
-                });
-
-                shape.on('mousedown', function() {
-                    mouseDownTrigger();
-                });
-                backLayer.add(shape);
-            }());     
-        }
-            backLayer.add(text);
-            stage.add(backLayer);
-            stage.getContent().addEventListener('mousedown', function(e) {
-                   
-                if(!paused)
-                {
-                    attempts+=1;
-
-                    if(hit == true)
-                    {
-                        hit = false;
-                        score+=1;
-                        text.setText('Score: ' + score);
-                        backLayer.draw();
-                    }
-
-                    if(attempts == 3)
-                    {
-                        if(score == 3)
-                        {
-                            playAudio("topscore.ogg");
-                        }
-                        else if(score == 0){
-                            console.log('nooooo');
-                            playAudio("nooo.ogg");
-                        }
-                        restartGame();
-                    }
-                }
-                else{
-                    hit = false;
-                }
+            },
+        });
+        
+        backLayer.add(shape);
+        shape.on('mousedown', function() {
+            mouseDownTrigger();
+        });
                 
-            });     
+            // }());     
+
+        backLayer.add(text);
+        stage.getContent().addEventListener('mousedown', function(e) {
+               
+            if(!paused)
+            {
+                attempts+=1;
+
+                if(hit == true)
+                {
+                    hit = false;
+                    score+=1;
+                    text.setText('Score: ' + score);
+                    backLayer.draw();
+                }
+
+                if(attempts == 3)
+                {
+                    if(score == 3)
+                    {
+                        playAudio("topscore.ogg");
+                    }
+                    else if(score == 0){
+                        playAudio("nooo.ogg");
+                    }
+                    restartGame();
+                }
+            }
+            else{
+                hit = false;
+            }
+            
+        });     
         // GO!
         gameLoop();
     }
