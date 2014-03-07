@@ -100,7 +100,8 @@ window.onload = function() {
             balls.push(ball);
         }        
 
-        
+        // for(var i = 0; i < balls.length; i++)
+        // {
         shape = new Kinetic.Shape({
             opacity: 0.8,
             fill: '#00D2AF',
@@ -110,6 +111,7 @@ window.onload = function() {
             name:'shape',
             drawFunc: function (context) {
                 var ball;
+                context.beginPath();
                 for(var i = 0; i < balls.length; i++)
                 {
                     var myInt = i;
@@ -117,7 +119,6 @@ window.onload = function() {
                         ball = balls[myInt];
                         var x = balls[myInt].x;
                         var y = balls[myInt].y;
-                        context.beginPath();
                         context.fillStyle="#0000ff";
 
                         // Draws a circle of radius 20 at the coordinates 100,100 on the canvas
@@ -133,8 +134,8 @@ window.onload = function() {
                             ball.angle = 360 - ball.angle;
                         }
                         ball.radians = ball.angle * Math.PI / 180;
-                        ball.xunits = Math.cos(ball.radians) * ball.speed;
-                        ball.yunits = Math.sin(ball.radians) * ball.speed;
+                        ball.xunits = Math.cos(ball.radians) * 0.1;
+                        ball.yunits = Math.sin(ball.radians) * 0.1;
                         context.closePath();
                 }
                         context.fillStrokeShape(this);
@@ -145,7 +146,7 @@ window.onload = function() {
         shape.on('mousedown', function() {
             mouseDownTrigger();
         });
-                
+        // }            
             // }());     
 
         backLayer.add(text);
