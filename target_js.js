@@ -7,39 +7,66 @@
 var paused = false;
 // Array to store x pos to stop overlap
 var xPosition = [];
-
+var backLayer;
 
 window.onload = function() {
-  
-    var maxSize = 8;
-    var minSize = 5;
-    var maxSpeed = maxSize + 10;
+
+    var t = window;
     var balls = [];
-    var radius = 24;
+    var radius = 150;
     var numBalls = 3;
-    var shape;
     var text;
     var attempts = 0;
     var score = 0;
     var stage;
-    var shape;
-    var backLayer;
+    var cow;
     var hit = false;
     var screenwidth = $( window ).width();
     var screenheight = $( window ).height();
 
-    setupGame();
+    var image = new Image();
+    image.src = "images/cow.png";
+    image.onload = function () {
+        setupGame();    
+    }  
 
     // load the ball image and create the Kinetic.Shape
-    function mouseDownTrigger() {
+    function mouseDownCowTrigger() {
         hit = true;
     }
-
+    
     function gameLoop() {
+        var t = window;
+
         window.requestAnimationFrame(gameLoop);
-        backLayer.clear();
-        shape.draw();
-        backLayer.draw();
+
+        //update cows and draw layer
+        t.backLayer.clear();
+        for(var i = 0; i < balls.length; i++)
+        {
+            var myInt = i;
+            ball = balls[myInt];
+            var x = balls[myInt].x;
+            var y = balls[myInt].y;
+
+            ball.x += ball.xunits;
+            ball.y += ball.yunits;
+
+            if (ball.x > (screenwidth - ball.radius) || ball.x < ball.radius) {
+                ball.angle = 180 - ball.angle;
+            }
+             
+            if (ball.y  > (screenheight - ball.radius) || ball.y < ball.radius) {
+                ball.angle = 360 - ball.angle;
+            }
+        
+            ball.radians = ball.angle * Math.PI / 180;
+            ball.xunits = Math.cos(ball.radians) * ball.speed;
+            ball.yunits = Math.sin(ball.radians) * ball.speed;
+            ball.cow.setPosition({x:ball.x, y:ball.y});
+
+        }
+        t.backLayer.draw();
     }
 
     function restartGame(){
@@ -48,27 +75,25 @@ window.onload = function() {
         stage.removeChildren();
         balls=[];
         setupGame();
-        maxSpeed=1;
     }
 
     function playAudio(audiofile)
     {
         var sound = new Audio("sounds/" + audiofile);
-        console.log(sound);
         sound.play();
     }
 
     function setupGame(){
-    console.log(maxSpeed)
 
         stage = new Kinetic.Stage({
             container: 'container',
             width: screenwidth,
             height: screenheight,
+            listening: true
         });
 
-        backLayer = new Kinetic.Layer();
-        stage.add(backLayer);
+        t.backLayer = new Kinetic.Layer();
+        stage.add(t.backLayer);
 
         text = new Kinetic.Text({
             x: 10,
@@ -79,13 +104,14 @@ window.onload = function() {
             fill: 'black'
         });
 
+        t.backLayer.add(text);
+
+
         for (var i = 0; i < numBalls; i++) {
-            var speed = maxSpeed - radius;
-            var x = Math.floor(Math.random()*((screenwidth-100) - 100)+100);
-            checkOverlap(x);
-            xPosition[i] = x;
-            var y = Math.floor(Math.random()*((screenheight-100) - 100)+100);
-            
+            var speed = 0.9;
+            var x = Math.floor((Math.random() * ((screenwidth - radius) - radius)) + radius);
+            var y = Math.floor((Math.random() * ((screenheight - radius) - radius)) + radius);
+
             var angle = Math.floor(Math.random() * 360);
             var radians = angle * Math.PI / 180;
             var ball = {
@@ -95,63 +121,45 @@ window.onload = function() {
                 speed: speed,
                 angle: angle,
                 xunits: Math.cos(radians) * speed,
-                yunits: Math.sin(radians) * speed
+                yunits: Math.sin(radians) * speed,
+                cow: null
             };
-            balls.push(ball);
-        }        
 
-        // for(var i = 0; i < balls.length; i++)
-        // {
-        shape = new Kinetic.Shape({
-            opacity: 0.8,
-            fill: '#00D2AF',
-            stroke: 'black',
-            strokeWidth: 4,
-            draggable:true,
-            name:'shape',
-            drawFunc: function (context) {
-                var ball;
-                context.beginPath();
-                for(var i = 0; i < balls.length; i++)
-                {
-                    var myInt = i;
-                    // (function() {
-                        ball = balls[myInt];
-                        var x = balls[myInt].x;
-                        var y = balls[myInt].y;
-                        context.fillStyle="#0000ff";
+            ball.cow =  new Kinetic.Rect({
+                        x: 250,
+                        y: 40,
+                        width:191,
+                        height:158,
+                        fillPatternImage: image
+                    });
 
-                        // Draws a circle of radius 20 at the coordinates 100,100 on the canvas
-                        context.arc(x,y,100,0,Math.PI*2,true); 
-                        context.closePath();
-                        context.fill();
-                                          
-                        ball.x += ball.xunits;
-                        ball.y += ball.yunits;
-                        if (ball.x + ball.radius * 2 > screenwidth || ball.x < 0) {
-                            ball.angle = 180 - ball.angle;
-                        } else if (ball.y + ball.radius * 2 > screenheight || ball.y < 0) {
-                            ball.angle = 360 - ball.angle;
-                        }
-                        ball.radians = ball.angle * Math.PI / 180;
-                        ball.xunits = Math.cos(ball.radians) * 0.1;
-                        ball.yunits = Math.sin(ball.radians) * 0.1;
-                        context.closePath();
+            ball.cow.on('mousedown touchstart', function(e) {
+                var x = mousePos.x;
+                var y = mousePos.y;
+                var node = e.targetNode;
+                var nodeID = node.getName();
+                if (nodeID !== 'bg') {
+                    target = node;
+                } else {
+                    target = empty;
                 }
-                        context.fillStrokeShape(this);
-            },
-        });
-        
-        backLayer.add(shape);
-        shape.on('mousedown', function() {
-            mouseDownTrigger();
-        });
-        // }            
-            // }());     
+                // if (isTransparentUnderMouse(hitCow, e))
+                // {
+                //     console.log("IT IS TRANSPARENT")
+                // }
+                // else{
+                //     console.log("SOMETHING")
+                //     mouseDownCowTrigger();
+                // }
+            });
 
-        backLayer.add(text);
+            t.backLayer.add(ball.cow);
+
+            balls.push(ball);
+        }     
+    
         stage.getContent().addEventListener('mousedown', function(e) {
-               
+
             if(!paused)
             {
                 attempts+=1;
@@ -168,7 +176,7 @@ window.onload = function() {
                 {
                     if(score == 3)
                     {
-                        playAudio("topscore.ogg");
+                        playAudio("ohyeah.mp3");
                     }
                     else if(score == 0){
                         playAudio("nooo.ogg");
@@ -178,8 +186,7 @@ window.onload = function() {
             }
             else{
                 hit = false;
-            }
-            
+            }  
         });     
         // GO!
         gameLoop();
@@ -198,6 +205,32 @@ function setPaused()
     }
         
 }
+
+// var isTransparentUnderMouse = function (target, evnt) {
+//     var l = 0, p = 0;
+//     var theShape = evnt.targetNode;
+//     console.log(theShape)
+//     if (target.offsetParent) {
+//         var ele = target;
+//         do {
+//             l += ele.offsetLeft;
+//             p += ele.offsetTop;
+//         } while (ele = ele.offsetParent);
+//     }
+//     var x = evnt.x - l;
+//     var y = evnt.y - p;
+//     var imgdata = target.getContext('2d').getImageData(x, y, 1, 1).data;
+//     console.log(imgdata)
+//     if (
+//         imgdata[0] == 0 &&
+//         imgdata[1] == 0 &&
+//         imgdata[2] == 0 &&
+//         imgdata[3] == 0
+//     ){
+//         return true;
+//     }
+//     return false;
+// };
 
 function checkOverlap(current)
 {
