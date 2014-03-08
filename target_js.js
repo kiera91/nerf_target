@@ -134,22 +134,14 @@ window.onload = function() {
                     });
 
             ball.cow.on('mousedown touchstart', function(e) {
-                var x = mousePos.x;
-                var y = mousePos.y;
-                var node = e.targetNode;
-                var nodeID = node.getName();
-                if (nodeID !== 'bg') {
-                    target = node;
-                } else {
-                    target = empty;
-                }
+               mouseDownCowTrigger();
                 // if (isTransparentUnderMouse(hitCow, e))
                 // {
                 //     console.log("IT IS TRANSPARENT")
                 // }
                 // else{
                 //     console.log("SOMETHING")
-                //     mouseDownCowTrigger();
+                //     
                 // }
             });
 
