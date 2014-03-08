@@ -134,7 +134,7 @@ window.onload = function() {
                     });
 
             ball.cow.on('mousedown touchstart', function(e) {
-               mouseDownCowTrigger();
+                mouseDownCowTrigger();
                 // if (isTransparentUnderMouse(hitCow, e))
                 // {
                 //     console.log("IT IS TRANSPARENT")
