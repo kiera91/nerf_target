@@ -53,9 +53,9 @@ window.onload = function() {
                 ball.cow.setScale({x:1});
             }else if(ball.x < ball.radius){
                 ball.angle = 180 - ball.angle;
-                ball.cow.setScale({x:-1});
+               ball.cow.setScale({x:-1});
             }
-             
+            
             // up or down
             if (ball.y  > (screenheight - ball.radius) || ball.y < ball.radius) {
                 ball.angle = 360 - ball.angle;
@@ -113,7 +113,7 @@ window.onload = function() {
 
 
         for (var i = 0; i < numBalls; i++) {
-            var speed = 3;
+            var speed = 0.5;
             var x = Math.floor((Math.random() * ((screenwidth - radius) - radius)) + radius);
             var y = Math.floor((Math.random() * ((screenheight - radius) - radius)) + radius);
 
@@ -153,8 +153,23 @@ window.onload = function() {
             balls.push(ball);
         }     
     
-    $('#container canvas').mousedown(function (e) {
+    $('#container .kineticjs-content canvas').mousedown(function (e) {
         var theCanvas = this;
+        var c = theCanvas.getContext('2d');
+        var colourToAdd = c.createImageData(10,10);
+        var pos = findPos(theCanvas);
+        var mouseX = e.pageX - pos.x;
+        var mouseY = e.pageY - pos.y;
+       for (var i=0;i<colourToAdd.data.length;i+=4)
+        {
+            console.log('here')
+            colourToAdd.data[i+0]=255;
+            colourToAdd.data[i+1]=0;
+            colourToAdd.data[i+2]=0;
+            colourToAdd.data[i+3]=255;
+        }
+        c.putImageData(colourToAdd, mouseX, mouseY)
+
         if(!paused)
         {
             attempts+=1;
@@ -213,6 +228,9 @@ function checkIfHit(e, theCanvas)
       if (mouseX >= balls[i].x && mouseX <= (balls[i].x + balls[i].width) ) {
             var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
             var alpha = imgd.data[(mouseY*theCanvas.width+mouseX)*4+3];
+            
+
+           
             if(alpha != 0){
                 return true
             }
