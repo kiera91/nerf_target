@@ -50,10 +50,10 @@ window.onload = function() {
             //left or right
             if (ball.x > (screenwidth - ball.radius)) {
                 ball.angle = 180 - ball.angle;
-                ball.cow.setScale({x:1});
+              //  ball.cow.setScale({x:1});
             }else if(ball.x < ball.radius){
                 ball.angle = 180 - ball.angle;
-               ball.cow.setScale({x:-1});
+              // ball.cow.setScale({x:-1});
             }
             
             // up or down
@@ -142,14 +142,14 @@ window.onload = function() {
                     });
 
             t.backLayer.add(ball.cow);
-            if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
-            {
-                ball.cow.setScale({x:-1});
-            }
-            else if((angle >= 90 && angle < 180) || (angle >= 180 && angle < 270))
-            {
-                ball.cow.setScale({x:1});
-            }
+            //if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
+            //{
+            //    ball.cow.setScale({x:-1});
+            //}
+            //else if((angle >= 90 && angle < 180) || (angle >= 180 && angle < 270))
+            //{
+            //    ball.cow.setScale({x:1});
+            //}
             balls.push(ball);
         }     
     
