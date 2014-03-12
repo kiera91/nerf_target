@@ -224,21 +224,19 @@ function checkIfHit(e, theCanvas)
     var mouseX = e.pageX - pos.x;
     var mouseY = e.pageY - pos.y;
     var c = theCanvas.getContext('2d');
-    for (var i = 0; i < balls.length; i++) {
-      if (mouseX >= balls[i].x && mouseX <= (balls[i].x + balls[i].width) ) {
-            var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
-            var alpha = imgd.data[(mouseY*theCanvas.width+mouseX)*4+3];
-            
 
-           
-            if(alpha != 0){
-                return true
-            }
-            else{
-                return false;
-            }
-      }
+    var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
+    var alpha = imgd.data[3];
+
+    console.log(alpha);
+
+    if(alpha != 0){
+        return true
     }
+    else{
+        return false;
+    }
+
 }
 
 function setPaused()
