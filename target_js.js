@@ -47,10 +47,16 @@ window.onload = function() {
             ball.x += ball.xunits;
             ball.y += ball.yunits;
 
-            if (ball.x > (screenwidth - ball.radius) || ball.x < ball.radius) {
+            //left or right
+            if (ball.x > (screenwidth - ball.radius)) {
                 ball.angle = 180 - ball.angle;
+              //  ball.cow.setScale({x:1});
+            }else if(ball.x < ball.radius){
+                ball.angle = 180 - ball.angle;
+              // ball.cow.setScale({x:-1});
             }
-             
+            
+            // up or down
             if (ball.y  > (screenheight - ball.radius) || ball.y < ball.radius) {
                 ball.angle = 360 - ball.angle;
             }
@@ -59,7 +65,6 @@ window.onload = function() {
             ball.xunits = Math.cos(ball.radians) * ball.speed;
             ball.yunits = Math.sin(ball.radians) * ball.speed;
             ball.cow.setPosition({x:ball.x, y:ball.y});
-
         }
         t.backLayer.draw();
     }
@@ -70,6 +75,11 @@ window.onload = function() {
         stage.removeChildren();
         balls=[];
         setupGame();
+    }
+
+    function setDirection(object)
+    {
+
     }
 
     function playAudio(audiofile)
@@ -103,7 +113,7 @@ window.onload = function() {
 
 
         for (var i = 0; i < numBalls; i++) {
-            var speed = 0.9;
+            var speed = 0.5;
             var x = Math.floor((Math.random() * ((screenwidth - radius) - radius)) + radius);
             var y = Math.floor((Math.random() * ((screenheight - radius) - radius)) + radius);
 
@@ -132,12 +142,34 @@ window.onload = function() {
                     });
 
             t.backLayer.add(ball.cow);
-
+            //if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
+            //{
+            //    ball.cow.setScale({x:-1});
+            //}
+            //else if((angle >= 90 && angle < 180) || (angle >= 180 && angle < 270))
+            //{
+            //    ball.cow.setScale({x:1});
+            //}
             balls.push(ball);
         }     
     
-    $('#container canvas').mousedown(function (e) {
+    $('#container .kineticjs-content canvas').mousedown(function (e) {
         var theCanvas = this;
+        var c = theCanvas.getContext('2d');
+        var colourToAdd = c.createImageData(10,10);
+        var pos = findPos(theCanvas);
+        var mouseX = e.pageX - pos.x;
+        var mouseY = e.pageY - pos.y;
+       for (var i=0;i<colourToAdd.data.length;i+=4)
+        {
+            console.log('here')
+            colourToAdd.data[i+0]=255;
+            colourToAdd.data[i+1]=0;
+            colourToAdd.data[i+2]=0;
+            colourToAdd.data[i+3]=255;
+        }
+        c.putImageData(colourToAdd, mouseX, mouseY)
+
         if(!paused)
         {
             attempts+=1;
@@ -192,18 +224,19 @@ function checkIfHit(e, theCanvas)
     var mouseX = e.pageX - pos.x;
     var mouseY = e.pageY - pos.y;
     var c = theCanvas.getContext('2d');
-    for (var i = 0; i < balls.length; i++) {
-      if (mouseX >= balls[i].x && mouseX <= (balls[i].x + balls[i].width) ) {
-            var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
-            var alpha = imgd.data[(mouseY*theCanvas.width+mouseX)*4+3];
-            if(alpha != 0){
-                return true
-            }
-            else{
-                return false;
-            }
-      }
+
+    var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
+    var alpha = imgd.data[3];
+
+    console.log(alpha);
+
+    if(alpha != 0){
+        return true
     }
+    else{
+        return false;
+    }
+
 }
 
 function setPaused()
