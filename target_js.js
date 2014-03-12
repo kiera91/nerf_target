@@ -24,6 +24,11 @@ window.onload = function() {
     var screenwidth = $( window ).width();
     var screenheight = $( window ).height();
 
+    var canvas = $('#theCanvas')[0];
+    var context = canvas.getContext('2d');
+    context.canvas.height = screenheight;
+    context.canvas.width = screenwidth;
+
     var image = new Image();
     image.src = "images/cow.png";
     image.onload = function () {
@@ -32,11 +37,12 @@ window.onload = function() {
     
     function gameLoop() {
         var t = window;
+            canvas.width = canvas.width;
 
         window.requestAnimationFrame(gameLoop);
 
         //update cows and draw layer
-        t.backLayer.clear();
+
         for(var i = 0; i < balls.length; i++)
         {
             var myInt = i;
@@ -64,15 +70,15 @@ window.onload = function() {
             ball.radians = ball.angle * Math.PI / 180;
             ball.xunits = Math.cos(ball.radians) * ball.speed;
             ball.yunits = Math.sin(ball.radians) * ball.speed;
-            ball.cow.setPosition({x:ball.x, y:ball.y});
+            context.drawImage(image, ball.x, ball.y);
+
         }
-        t.backLayer.draw();
+
     }
 
     function restartGame(){
         score = 0;
         attempts = 0;
-        stage.removeChildren();
         balls=[];
         setupGame();
     }
@@ -89,29 +95,7 @@ window.onload = function() {
     }
 
     function setupGame(){
-
-        stage = new Kinetic.Stage({
-            container: 'container',
-            width: screenwidth,
-            height: screenheight,
-            listening: true
-        });
-
-        t.backLayer = new Kinetic.Layer();
-        stage.add(t.backLayer);
-
-        text = new Kinetic.Text({
-            x: 10,
-            y: 10,
-            fontFamily: 'Calibri',
-            fontSize: 24,
-            text: 'Score: 0',
-            fill: 'black'
-        });
-
-        t.backLayer.add(text);
-
-
+        
         for (var i = 0; i < numBalls; i++) {
             var speed = 0.5;
             var x = Math.floor((Math.random() * ((screenwidth - radius) - radius)) + radius);
@@ -132,16 +116,8 @@ window.onload = function() {
                 cow: null
             };
 
-            ball.cow =  new Kinetic.Rect({
-                        x: 250,
-                        y: 40,
-                        width:191,
-                        height:158,
-                        fillPatternImage: image
-                        // fill: '#FF0000'
-                    });
+            context.drawImage(image, ball.x, ball.y);
 
-            t.backLayer.add(ball.cow);
             //if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
             //{
             //    ball.cow.setScale({x:-1});
@@ -153,22 +129,10 @@ window.onload = function() {
             balls.push(ball);
         }     
     
-    $('#container .kineticjs-content canvas').mousedown(function (e) {
+    $('#theCanvas').mousedown(function (e) {
         var theCanvas = this;
         var c = theCanvas.getContext('2d');
-        var colourToAdd = c.createImageData(10,10);
-        var pos = findPos(theCanvas);
-        var mouseX = e.pageX - pos.x;
-        var mouseY = e.pageY - pos.y;
-       for (var i=0;i<colourToAdd.data.length;i+=4)
-        {
-            console.log('here')
-            colourToAdd.data[i+0]=255;
-            colourToAdd.data[i+1]=0;
-            colourToAdd.data[i+2]=0;
-            colourToAdd.data[i+3]=255;
-        }
-        c.putImageData(colourToAdd, mouseX, mouseY)
+        console.log("BAAAAA")
 
         if(!paused)
         {
@@ -177,8 +141,7 @@ window.onload = function() {
             {
                 hit = false;
                 score+=1;
-                text.setText('Score: ' + score);
-                backLayer.draw();
+                console.log(score)
             }
 
             if(attempts == 3)
@@ -224,19 +187,22 @@ function checkIfHit(e, theCanvas)
     var mouseX = e.pageX - pos.x;
     var mouseY = e.pageY - pos.y;
     var c = theCanvas.getContext('2d');
+    for (var i = 0; i < balls.length; i++) {
+        console.log("here")
+      if (mouseX >= balls[i].x && mouseX <= (balls[i].x + balls[i].width) ) {
+            console.log("hit")
+            var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
+            var alpha = imgd.data[3];
+            console.log(alpha)
 
-    var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
-    var alpha = imgd.data[3];
-
-    console.log(alpha);
-
-    if(alpha != 0){
-        return true
+            if(alpha != 0){
+                return true
+            }
+            else{
+                return false;
+            }
+      }
     }
-    else{
-        return false;
-    }
-
 }
 
 function setPaused()
