@@ -23,18 +23,60 @@ window.onload = function() {
     var hit = false;
     var screenwidth = $( window ).width();
     var screenheight = $( window ).height();
-
     var canvas = $('#theCanvas')[0];
     var context = canvas.getContext('2d');
-    context.canvas.height = screenheight;
-    context.canvas.width = screenwidth;
 
     var image = new Image();
-    image.src = "images/cow.png";
-    image.onload = function () {
-        setupGame();    
-    }  
-    
+
+    function init()
+    {
+        context.canvas.height = screenheight;
+        context.canvas.width = screenwidth;
+
+        $('#theCanvas').mousedown(function (e) {
+            var theCanvas = this;
+            canvasHit(e, theCanvas)
+        }); 
+
+        image.src = "images/cow.png";
+        image.onload = function () {    
+            setupGame();    
+        }  
+    }
+
+    function canvasHit(e, theCanvas)
+    {
+        
+        var c = theCanvas.getContext('2d');
+        console.log("BAAAAA")
+
+        if(!paused)
+        {
+            attempts+=1;
+            if(checkIfHit(e, theCanvas))
+            {
+                hit = false;
+                score+=1;
+                console.log(score)
+            }
+
+            if(attempts == 3)
+            {
+                if(score == 3)
+                {
+                    playAudio("ohyeah.mp3");
+                }
+                else if(score == 0){
+                    playAudio("nooo.ogg");
+                }
+                restartGame();
+            }
+        }
+        else{
+            hit = false;
+        }  
+    }
+
     function gameLoop() {
         var t = window;
             canvas.width = canvas.width;
@@ -128,41 +170,12 @@ window.onload = function() {
             //}
             balls.push(ball);
         }     
-    
-    $('#theCanvas').mousedown(function (e) {
-        var theCanvas = this;
-        var c = theCanvas.getContext('2d');
-        console.log("BAAAAA")
-
-        if(!paused)
-        {
-            attempts+=1;
-            if(checkIfHit(e, theCanvas))
-            {
-                hit = false;
-                score+=1;
-                console.log(score)
-            }
-
-            if(attempts == 3)
-            {
-                if(score == 3)
-                {
-                    playAudio("ohyeah.mp3");
-                }
-                else if(score == 0){
-                    playAudio("nooo.ogg");
-                }
-                restartGame();
-            }
-        }
-        else{
-            hit = false;
-        }  
-    });     
+        
     // GO!
     gameLoop();
     }
+
+    init()
 }
 
 function findPos(obj) {
