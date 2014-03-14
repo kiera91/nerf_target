@@ -1,6 +1,5 @@
-var xPosition = [];
-var backLayer;
 var animals = [];
+
 
 window.onload = function() {
     var t = window;
@@ -22,6 +21,7 @@ window.onload = function() {
 
     function init()
     {
+        $('#beginning').css('display', 'none');
         context.canvas.height = screenheight;
         context.canvas.width = screenwidth      
 
@@ -44,6 +44,7 @@ window.onload = function() {
 
     function canvasHit(e, theCanvas)
     {        
+
         // var c = theCanvas.getContext('2d');
         if(e.which == 3){
         
@@ -52,21 +53,21 @@ window.onload = function() {
         {
             attempts += 1;
 
-        if(checkIfHit(e, theCanvas))
-        {
-            score += 1;
-        }
+            if(checkIfHit(e, theCanvas))
+            {
+                score += 1;
+            }
 
-        if(attempts == 3)
-        {
-            if(score == 3) {
-                playAudio("ohyeah.mp3");
+            if(attempts == 3)
+            {
+                if(score == 3) {
+                    playAudio("ohyeah.mp3");
+                }
+                else if(score == 0) {
+                    playAudio("nooo.ogg");
+                }
+                restartGame();
             }
-            else if(score == 0) {
-                playAudio("nooo.ogg");
-            }
-            restartGame();
-        }
         }
         
     }
@@ -137,7 +138,8 @@ window.onload = function() {
         score = 0;
         attempts = 0;
         animals=[];
-        setupGame();
+        $('#end').css('display','inline-block');
+        //setupGame();
     }    
 
     function setupGame() {
@@ -184,8 +186,8 @@ window.onload = function() {
         animals.push(animal);
     }
 
-    init();
-}
+    // init();
+// }
 
 function playAudio(audiofile)
 {
