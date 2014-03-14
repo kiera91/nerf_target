@@ -50,13 +50,13 @@
 		},
 		"cow" : {
 			"image": "images/cow.png",
-			"sound": "test.mp3",
+			"sound": "cow.mp3",
 			"height": "158",
 			"width": "191"
 		},
 		"disguised_pig" : {
 			"image": "images/disguised_pig.png",
-			"sound": "disguised_pig.mp3",
+			"sound": "moink.mp3",
 			"height": "135",
 			"width": "168"
 		},
