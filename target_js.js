@@ -1,33 +1,23 @@
-/*
-
-    LEVEL 1 - 3 still circles on canvas.
-
-*/
-
-var paused = false;
-// Array to store x pos to stop overlap
 var xPosition = [];
 var backLayer;
 var animals = [];
 
 window.onload = function() {
-
     var t = window;
-    var numAnimals = 3;
     var text;
     var attempts = 0;
     var score = 0;
     var stage;
     var cow;
-    var hit = false;
-    var screenwidth = $( window ).width();
-    var screenheight = $( window ).height();
+    var screenwidth = $(window).width();
+    var screenheight = $(window).height();
     var canvas = $('#theCanvas')[0];
     var context = canvas.getContext('2d');
-    var images = [];
-    
+    var images = [];    
     var configFile;
     var currentLevel = 0;
+    var loopCount;
+    var target;
 
     function init()
     {
@@ -39,57 +29,47 @@ window.onload = function() {
             canvasHit(e, theCanvas)
         }); 
 
-        setupGame();    
+        setupGame();           
+        gameLoop();
     }
 
     function canvasHit(e, theCanvas)
-    {
-        
-        var c = theCanvas.getContext('2d');
+    {        
+        // var c = theCanvas.getContext('2d');
 
-        if(!paused)
+        attempts += 1;
+
+        if(checkIfHit(e, theCanvas))
         {
-            attempts+=1;
-            if(checkIfHit(e, theCanvas))
-            {
-                hit = false;
-                score+=1;
-                console.log(score)
-            }
-
-            if(attempts == 3)
-            {
-                if(score == 3)
-                {
-                    playAudio("ohyeah.mp3");
-                }
-                else if(score == 0){
-                    playAudio("nooo.ogg");
-                }
-                restartGame();
-            }
+            score += 1;
         }
-        else{
-            hit = false;
-        }  
+
+        if(attempts == 3)
+        {
+            if(score == 3) {
+                playAudio("ohyeah.mp3");
+            }
+            else if(score == 0) {
+                playAudio("nooo.ogg");
+            }
+            restartGame();
+        }
     }
 
     function gameLoop() {
         var t = window;
         canvas.width = canvas.width;
 
+        loopCount++;
+
         window.requestAnimationFrame(gameLoop);
         context.fillStyle = "red";
-        context.font = "bold 42px Arial";
-        context.fillText("Score: " + score, 10, 40);
-        //update cows and draw layer
+        context.font = "bold 30px Arial";
+        context.fillText("Target: " + target, 10, 30);
+        context.fillText("Score: " + score + "/" + attempts, 10, 60);
 
-        for(var i = 0; i < animals.length; i++)
-        {
-            var myInt = i;
-            animal = animals[myInt];
-            var x = animals[myInt].x;
-            var y = animals[myInt].y;
+        for(var i = 0; i < animals.length; i++) {
+            animal = animals[i];
 
             animal.x += animal.xunits;
             animal.y += animal.yunits;
@@ -97,11 +77,9 @@ window.onload = function() {
             //left or right
             if (animal.x > (screenwidth - animal.width)) {
                 animal.angle = 180 - animal.angle;
-              //  animal.cow.setScale({x:1});
-            }else if(animal.x <= 0){
+            } else if(animal.x <= 0){
                 animal.angle = 180 - animal.angle;
                 flipped = true;
-              // animal.cow.setScale({x:-1});
             }
             
             // up or down
@@ -112,10 +90,9 @@ window.onload = function() {
             animal.radians = animal.angle * Math.PI / 180;
             animal.xunits = Math.cos(animal.radians) * animal.speed;
             animal.yunits = Math.sin(animal.radians) * animal.speed;
+
             context.drawImage(images[i], animal.x, animal.y);
-
-        }
-
+        }       
     }
 
     function restartGame(){
@@ -123,83 +100,66 @@ window.onload = function() {
         attempts = 0;
         animals=[];
         setupGame();
-    }
+    }    
 
-    function setDirection(object)
-    {
+    function setupGame() {
+        loopCount = 0;
 
-    }
+        screenwidth = $(window).width();
+        screenheight = $(window).height();
 
-    function playAudio(audiofile)
-    {
-        var sound = new Audio("sounds/" + audiofile);
-        sound.play();
-    }
-
-    function setupGame(){
         $.getJSON("config.json", function(json) {
             config = json;
 
-            // console.log(config);
-
             for (var i = 0; i < config.levels[currentLevel].animals.length; i++) {
-                // var speed = 0.9;
+                target = config.levels[currentLevel].maxClicks;
+
                 var levelAnimal = config.levels[currentLevel].animals[i];
                 var configAnimal = config.animals[levelAnimal.name];
-                
-                console.log(configAnimal);
 
                 images[i] = new Image();
                 images[i].src = configAnimal.image;
                 images[i].onload = drawAnimal(configAnimal, levelAnimal);
-            }
-            gameLoop();
+            }            
         });
     }
 
     function drawAnimal(configAnimal, levelAnimal) {
-    console.log(configAnimal);
-    console.log(levelAnimal);
-    // image.src = config.animals[config.levels[currentLevel].animals[i].name].image;
+        var angle = Math.floor(Math.random() * 360);
+        var radians = angle * Math.PI / 180;
+        var animal = {
+            x: 1,
+            y: 1,
+            height: parseInt(configAnimal.height),
+            width: parseInt(configAnimal.width),
+            speed: levelAnimal.speed,
+            angle: angle,
+            xunits: Math.cos(radians) * levelAnimal.speed,
+            yunits: Math.sin(radians) * levelAnimal.speed,
+            sound: configAnimal.sound
+        };
+        
+        animal.x = Math.floor((Math.random() * ((screenwidth - animal.width) - animal.width)) + animal.width);
+        animal.y = Math.floor((Math.random() * ((screenheight - animal.height) - animal.height)) + animal.height);
+        
+        animals.push(animal);
+    }
 
-    var angle = Math.floor(Math.random() * 360);
-    var radians = angle * Math.PI / 180;
-    var animal = {
-        x: 0,
-        y: 0,
-        height: 158,
-        width: 191,
-        speed: levelAnimal.speed,
-        angle: angle,
-        xunits: Math.cos(radians) * levelAnimal.speed,
-        yunits: Math.sin(radians) * levelAnimal.speed
-    };
-    
-    animal.x = Math.floor((Math.random() * ((screenwidth - animal.width) - animal.width)) + animal.width);
-    animal.y = Math.floor((Math.random() * ((screenheight - animal.height) - animal.height)) + animal.height);
-    
-
-    //if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
-    //{
-    //    animal.cow.setScale({x:-1});
-    //}
-    //else if((angle >= 90 && angle < 180) || (angle >= 180 && angle < 270))
-    //{
-    //    animal.cow.setScale({x:1});
-    //}
-    animals.push(animal);
+    init();
 }
 
-    init()
+function playAudio(audiofile)
+{
+    var sound = new Audio("sounds/" + audiofile);
+    sound.play();
 }
-
-
 
 function findPos(obj) {
-    var curleft = 0,
-        curtop = 0;
+    var curleft = 0, curtop = 0;
+
     if (obj.offsetParent) {
-        do {
+        do 
+        {
             curleft += obj.offsetLeft;
             curtop += obj.offsetTop;
         } while (obj = obj.offsetParent);
@@ -218,47 +178,17 @@ function checkIfHit(e, theCanvas)
     var mouseY = e.pageY - pos.y;
     var c = theCanvas.getContext('2d');
     for (var i = 0; i < animals.length; i++) {
-        console.log("here")
-      if (mouseX >= animals[i].x && mouseX <= (animals[i].x + animals[i].width) ) {
-            console.log("hit")
+        if (mouseX >= animals[i].x && mouseX <= (animals[i].x + animals[i].width) ) {
             var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
             var alpha = imgd.data[3];
-            console.log(alpha)
 
-            if(alpha != 0){
-                return true
+            if (alpha != 0) {
+                playAudio(animals[i].sound);
+                return true;
             }
-            else{
+            else {
                 return false;
             }
-      }
-    }
-}
-
-function setPaused()
-{
-    if(paused){
-        paused = false;
-        $('#paused').prop('value', 'Pause Game');;
-    }
-    else{
-        paused = true;
-        $('#paused').prop('value', 'Carry On');
-    }
-        
-}
-
-function checkOverlap(current)
-{
-    console.log("current1: " + current)
-    $.each(xPosition, function(index, value){
-        value = value + 100;
-        console.log("v: " + value)
-        value1 = value - 100;
-        if(current <= value && current >= value1)
-        {
-            console.log('current: ' + current)
-            console.log('OVERLAP');
         }
-    });
+    }
 }

@@ -8,35 +8,35 @@
 			"animals":[
 				{
 					"name" : "chicken",
-					"speed" : "0"
+					"speed" : "1"
 				},	
 				{
 					"name" : "cow",
-					"speed" : "0"
+					"speed" : "1"
 				},
 				{
 					"name" : "disguised_pig",
-					"speed" : "0"
+					"speed" : "1"
 				},
 				{
 					"name" : "duck",
-					"speed" : "0"
+					"speed" : "1"
 				},
 				{
 					"name" : "horse",
-					"speed" : "0"
+					"speed" : "1"
 				},
 				{
 					"name" : "pig",
-					"speed" : "0"
+					"speed" : "1"
 				},
 				{
 					"name" : "sheep",
-					"speed" : "0"
+					"speed" : "1"
 				},
 				{
 					"name" : "turkey",
-					"speed" : "0"
+					"speed" : "1"
 				}
 			]
 		}
@@ -44,49 +44,49 @@
 	"animals": {
 		"chicken" : {
 			"image": "images/chicken.png",
-			"sound": "sounds/chicken.mp3",
+			"sound": "chicken.mp3",
 			"height": "129",
 			"width": "94"
 		},
 		"cow" : {
 			"image": "images/cow.png",
-			"sound": "sounds/cow.mp3",
+			"sound": "test.mp3",
 			"height": "158",
 			"width": "191"
 		},
 		"disguised_pig" : {
 			"image": "images/disguised_pig.png",
-			"sound": "sounds/disguised_pig.mp3",
+			"sound": "disguised_pig.mp3",
 			"height": "135",
 			"width": "168"
 		},
 		"duck" : {
 			"image": "images/duck.png",
-			"sound": "sounds/duck.mp3",
+			"sound": "duck.mp3",
 			"height": "135",
 			"width": "171"
 		},
 		"horse" : {
 			"image": "images/horse.png",
-			"sound": "sounds/horse.mp3",
+			"sound": "horse.mp3",
 			"height": "165",
 			"width": "204"
 		},
 		"pig" : {
 			"image": "images/pig.png",
-			"sound": "sounds/pig.mp3",
+			"sound": "pig.mp3",
 			"height": "135",
 			"width": "171"
 		},
 		"sheep" : {
 			"image": "images/sheep.png",
-			"sound": "sounds/sheep.mp3",
+			"sound": "sheep.mp3",
 			"height": "133",
 			"width": "165"
 		},
 		"turkey" : {
 			"image": "images/turkey.png",
-			"sound": "sounds/turkey.mp3",
+			"sound": "turkey.mp3",
 			"height": "138",
 			"width": "129"
 		}
