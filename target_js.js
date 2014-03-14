@@ -32,6 +32,7 @@ window.onload = function() {
     {
         context.canvas.height = screenheight;
         context.canvas.width = screenwidth;
+        
 
         $('#theCanvas').mousedown(function (e) {
             var theCanvas = this;
@@ -79,10 +80,12 @@ window.onload = function() {
 
     function gameLoop() {
         var t = window;
-            canvas.width = canvas.width;
+        canvas.width = canvas.width;
 
         window.requestAnimationFrame(gameLoop);
-
+        context.fillStyle = "red";
+        context.font = "bold 42px Arial";
+        context.fillText("Score: " + score, 10, 40);
         //update cows and draw layer
 
         for(var i = 0; i < balls.length; i++)
@@ -159,6 +162,7 @@ window.onload = function() {
             };
 
             context.drawImage(image, ball.x, ball.y);
+            
 
             //if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
             //{
