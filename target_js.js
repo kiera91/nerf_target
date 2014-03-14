@@ -8,13 +8,12 @@ var paused = false;
 // Array to store x pos to stop overlap
 var xPosition = [];
 var backLayer;
-var balls = [];
+var animals = [];
 
 window.onload = function() {
 
     var t = window;
-    var radius = 150;
-    var numBalls = 3;
+    var numAnimals = 3;
     var text;
     var attempts = 0;
     var score = 0;
@@ -25,31 +24,28 @@ window.onload = function() {
     var screenheight = $( window ).height();
     var canvas = $('#theCanvas')[0];
     var context = canvas.getContext('2d');
-
-    var image = new Image();
+    var images = [];
+    
+    var configFile;
+    var currentLevel = 0;
 
     function init()
     {
         context.canvas.height = screenheight;
-        context.canvas.width = screenwidth;
-        
+        context.canvas.width = screenwidth      
 
         $('#theCanvas').mousedown(function (e) {
             var theCanvas = this;
             canvasHit(e, theCanvas)
         }); 
 
-        image.src = "images/cow.png";
-        image.onload = function () {    
-            setupGame();    
-        }  
+        setupGame();    
     }
 
     function canvasHit(e, theCanvas)
     {
         
         var c = theCanvas.getContext('2d');
-        console.log("BAAAAA")
 
         if(!paused)
         {
@@ -88,34 +84,35 @@ window.onload = function() {
         context.fillText("Score: " + score, 10, 40);
         //update cows and draw layer
 
-        for(var i = 0; i < balls.length; i++)
+        for(var i = 0; i < animals.length; i++)
         {
             var myInt = i;
-            ball = balls[myInt];
-            var x = balls[myInt].x;
-            var y = balls[myInt].y;
+            animal = animals[myInt];
+            var x = animals[myInt].x;
+            var y = animals[myInt].y;
 
-            ball.x += ball.xunits;
-            ball.y += ball.yunits;
+            animal.x += animal.xunits;
+            animal.y += animal.yunits;
 
             //left or right
-            if (ball.x > (screenwidth - ball.radius)) {
-                ball.angle = 180 - ball.angle;
-              //  ball.cow.setScale({x:1});
-            }else if(ball.x < ball.radius){
-                ball.angle = 180 - ball.angle;
-              // ball.cow.setScale({x:-1});
+            if (animal.x > (screenwidth - animal.width)) {
+                animal.angle = 180 - animal.angle;
+              //  animal.cow.setScale({x:1});
+            }else if(animal.x <= 0){
+                animal.angle = 180 - animal.angle;
+                flipped = true;
+              // animal.cow.setScale({x:-1});
             }
             
             // up or down
-            if (ball.y  > (screenheight - ball.radius) || ball.y < ball.radius) {
-                ball.angle = 360 - ball.angle;
+            if (animal.y  > (screenheight - animal.height) || animal.y <= 0) {
+                animal.angle = 360 - animal.angle;
             }
         
-            ball.radians = ball.angle * Math.PI / 180;
-            ball.xunits = Math.cos(ball.radians) * ball.speed;
-            ball.yunits = Math.sin(ball.radians) * ball.speed;
-            context.drawImage(image, ball.x, ball.y);
+            animal.radians = animal.angle * Math.PI / 180;
+            animal.xunits = Math.cos(animal.radians) * animal.speed;
+            animal.yunits = Math.sin(animal.radians) * animal.speed;
+            context.drawImage(images[i], animal.x, animal.y);
 
         }
 
@@ -124,7 +121,7 @@ window.onload = function() {
     function restartGame(){
         score = 0;
         attempts = 0;
-        balls=[];
+        animals=[];
         setupGame();
     }
 
@@ -140,47 +137,63 @@ window.onload = function() {
     }
 
     function setupGame(){
-        
-        for (var i = 0; i < numBalls; i++) {
-            var speed = 0.5;
-            var x = Math.floor((Math.random() * ((screenwidth - radius) - radius)) + radius);
-            var y = Math.floor((Math.random() * ((screenheight - radius) - radius)) + radius);
+        $.getJSON("config.json", function(json) {
+            config = json;
 
-            var angle = Math.floor(Math.random() * 360);
-            var radians = angle * Math.PI / 180;
-            var ball = {
-                x: x,
-                y: y,
-                height: 158,
-                width: 191,
-                radius: radius,
-                speed: speed,
-                angle: angle,
-                xunits: Math.cos(radians) * speed,
-                yunits: Math.sin(radians) * speed,
-                cow: null
-            };
+            // console.log(config);
 
-            context.drawImage(image, ball.x, ball.y);
-            
+            for (var i = 0; i < config.levels[currentLevel].animals.length; i++) {
+                // var speed = 0.9;
+                var levelAnimal = config.levels[currentLevel].animals[i];
+                var configAnimal = config.animals[levelAnimal.name];
+                
+                console.log(configAnimal);
 
-            //if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
-            //{
-            //    ball.cow.setScale({x:-1});
-            //}
-            //else if((angle >= 90 && angle < 180) || (angle >= 180 && angle < 270))
-            //{
-            //    ball.cow.setScale({x:1});
-            //}
-            balls.push(ball);
-        }     
-        
-    // GO!
-    gameLoop();
+                images[i] = new Image();
+                images[i].src = configAnimal.image;
+                images[i].onload = drawAnimal(configAnimal, levelAnimal);
+            }
+            gameLoop();
+        });
     }
+
+    function drawAnimal(configAnimal, levelAnimal) {
+    console.log(configAnimal);
+    console.log(levelAnimal);
+    // image.src = config.animals[config.levels[currentLevel].animals[i].name].image;
+
+    var angle = Math.floor(Math.random() * 360);
+    var radians = angle * Math.PI / 180;
+    var animal = {
+        x: 0,
+        y: 0,
+        height: 158,
+        width: 191,
+        speed: levelAnimal.speed,
+        angle: angle,
+        xunits: Math.cos(radians) * levelAnimal.speed,
+        yunits: Math.sin(radians) * levelAnimal.speed
+    };
+    
+    animal.x = Math.floor((Math.random() * ((screenwidth - animal.width) - animal.width)) + animal.width);
+    animal.y = Math.floor((Math.random() * ((screenheight - animal.height) - animal.height)) + animal.height);
+    
+
+    //if((angle >= 0 && angle < 90) || (angle >= 270 && angle <= 360))
+    //{
+    //    animal.cow.setScale({x:-1});
+    //}
+    //else if((angle >= 90 && angle < 180) || (angle >= 180 && angle < 270))
+    //{
+    //    animal.cow.setScale({x:1});
+    //}
+    animals.push(animal);
+}
 
     init()
 }
+
+
 
 function findPos(obj) {
     var curleft = 0,
@@ -204,9 +217,9 @@ function checkIfHit(e, theCanvas)
     var mouseX = e.pageX - pos.x;
     var mouseY = e.pageY - pos.y;
     var c = theCanvas.getContext('2d');
-    for (var i = 0; i < balls.length; i++) {
+    for (var i = 0; i < animals.length; i++) {
         console.log("here")
-      if (mouseX >= balls[i].x && mouseX <= (balls[i].x + balls[i].width) ) {
+      if (mouseX >= animals[i].x && mouseX <= (animals[i].x + animals[i].width) ) {
             console.log("hit")
             var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
             var alpha = imgd.data[3];
