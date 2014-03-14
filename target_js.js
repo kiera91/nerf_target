@@ -1,26 +1,22 @@
-var xPosition = [];
-var backLayer;
 var animals = [];
-
-window.onload = function() {
-    var t = window;
-    var text;
-    var attempts = 0;
-    var score = 0;
-    var stage;
-    var cow;
-    var screenwidth = $(window).width();
-    var screenheight = $(window).height();
-    var canvas = $('#theCanvas')[0];
-    var context = canvas.getContext('2d');
-    var images = [];    
-    var configFile;
-    var currentLevel = 0;
-    var loopCount;
-    var target;
+var t = window;
+var text;
+var attempts = 0;
+var score = 0;
+var cow;
+var screenwidth = $(window).width();
+var screenheight = $(window).height();
+var canvas = $('#theCanvas')[0];
+var context = canvas.getContext('2d');
+var images = [];    
+var configFile;
+var currentLevel = 0;
+var loopCount;
+var target;
 
     function init()
     {
+        $('#beginning').css('display', 'none');
         context.canvas.height = screenheight;
         context.canvas.width = screenwidth      
 
@@ -35,8 +31,6 @@ window.onload = function() {
 
     function canvasHit(e, theCanvas)
     {        
-        // var c = theCanvas.getContext('2d');
-
         attempts += 1;
 
         if(checkIfHit(e, theCanvas))
@@ -99,7 +93,8 @@ window.onload = function() {
         score = 0;
         attempts = 0;
         animals=[];
-        setupGame();
+        $('#end').css('display','inline-block');
+        //setupGame();
     }    
 
     function setupGame() {
@@ -145,8 +140,8 @@ window.onload = function() {
         animals.push(animal);
     }
 
-    init();
-}
+    // init();
+// }
 
 function playAudio(audiofile)
 {
