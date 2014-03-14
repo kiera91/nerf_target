@@ -1,0 +1,94 @@
+{
+	"levels": [
+		{
+			"level": "1",
+			"background": "images/Farmyard-01.png",
+			"mode":"tappy",
+			"maxClicks": "3",
+			"animals":[
+				{
+					"name" : "chicken",
+					"speed" : "1"
+				},	
+				{
+					"name" : "cow",
+					"speed" : "1"
+				},
+				{
+					"name" : "disguised_pig",
+					"speed" : "1"
+				},
+				{
+					"name" : "duck",
+					"speed" : "1"
+				},
+				{
+					"name" : "horse",
+					"speed" : "1"
+				},
+				{
+					"name" : "pig",
+					"speed" : "1"
+				},
+				{
+					"name" : "sheep",
+					"speed" : "1"
+				},
+				{
+					"name" : "turkey",
+					"speed" : "1"
+				}
+			]
+		}
+	],
+	"animals": {
+		"chicken" : {
+			"image": "images/chicken.png",
+			"sound": "chicken.mp3",
+			"height": "129",
+			"width": "94"
+		},
+		"cow" : {
+			"image": "images/cow.png",
+			"sound": "test.mp3",
+			"height": "158",
+			"width": "191"
+		},
+		"disguised_pig" : {
+			"image": "images/disguised_pig.png",
+			"sound": "disguised_pig.mp3",
+			"height": "135",
+			"width": "168"
+		},
+		"duck" : {
+			"image": "images/duck.png",
+			"sound": "duck.mp3",
+			"height": "135",
+			"width": "171"
+		},
+		"horse" : {
+			"image": "images/horse.png",
+			"sound": "horse.mp3",
+			"height": "165",
+			"width": "204"
+		},
+		"pig" : {
+			"image": "images/pig.png",
+			"sound": "pig.mp3",
+			"height": "135",
+			"width": "171"
+		},
+		"sheep" : {
+			"image": "images/sheep.png",
+			"sound": "sheep.mp3",
+			"height": "133",
+			"width": "165"
+		},
+		"turkey" : {
+			"image": "images/turkey.png",
+			"sound": "turkey.mp3",
+			"height": "138",
+			"width": "129"
+		}
+	}
+}
