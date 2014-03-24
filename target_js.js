@@ -136,7 +136,8 @@ window.onload = function() {
             angle: angle,
             xunits: Math.cos(radians) * levelAnimal.speed,
             yunits: Math.sin(radians) * levelAnimal.speed,
-            sound: configAnimal.sound
+            sound: configAnimal.sound,
+            name: levelAnimal.name
         };
         
         animal.x = Math.floor((Math.random() * ((screenwidth - animal.width) - animal.width)) + animal.width);
@@ -177,8 +178,10 @@ function checkIfHit(e, theCanvas)
     var mouseX = e.pageX - pos.x;
     var mouseY = e.pageY - pos.y;
     var c = theCanvas.getContext('2d');
-    for (var i = 0; i < animals.length; i++) {
-        if (mouseX >= animals[i].x && mouseX <= (animals[i].x + animals[i].width) ) {
+    // check reverse order as the last animal added to canvas is at the front
+    for (var i = animals.length - 1; i >= 0; i--) {
+        if (mouseX >= animals[i].x && mouseX <= (animals[i].x + animals[i].width) &&
+            mouseY >= animals[i].y && mouseY <= (animals[i].y + animals[i].height)) {            
             var imgd = c.getImageData(mouseX, mouseY, theCanvas.width, theCanvas.height);
             var alpha = imgd.data[3];
 
