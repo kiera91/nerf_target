@@ -17,6 +17,7 @@ window.onload = function() {
     var configFile;
     var currentLevel = 0;
     var loopCount;
+	var speedMult = 1;
     var target;
 
     function init()
@@ -29,8 +30,8 @@ window.onload = function() {
             canvasHit(e, theCanvas)
         }); 
 
-        setupGame();           
-        gameLoop();
+        setupGame();      
+		gameLoop();
     }
 
     function canvasHit(e, theCanvas)
@@ -61,7 +62,7 @@ window.onload = function() {
         canvas.width = canvas.width;
 
         loopCount++;
-
+		
         window.requestAnimationFrame(gameLoop);
         context.fillStyle = "red";
         context.font = "bold 30px Arial";
@@ -69,29 +70,52 @@ window.onload = function() {
         context.fillText("Score: " + score + "/" + attempts, 10, 60);
 
         for(var i = 0; i < animals.length; i++) {
-            animal = animals[i];
+            //animal = animals[i];
 
-            animal.x += animal.xunits;
-            animal.y += animal.yunits;
+            animals[i].x += animals[i].xunits;
+            animals[i].y += animals[i].yunits;
 
             //left or right
-            if (animal.x > (screenwidth - animal.width)) {
-                animal.angle = 180 - animal.angle;
-            } else if(animal.x <= 0){
-                animal.angle = 180 - animal.angle;
+            if (animals[i].x > (screenwidth - animals[i].width)) {
+                animals[i].angle = 180 - animals[i].angle;
+            } else if(animals[i].x <= 0){
+                animals[i].angle = 180 - animals[i].angle;
                 flipped = true;
             }
             
             // up or down
-            if (animal.y  > (screenheight - animal.height) || animal.y <= 0) {
-                animal.angle = 360 - animal.angle;
+            if (animals[i].y  > (screenheight - animals[i].height) || animals[i].y <= 0) {
+                animals[i].angle = 360 - animals[i].angle;
             }
         
-            animal.radians = animal.angle * Math.PI / 180;
-            animal.xunits = Math.cos(animal.radians) * animal.speed;
-            animal.yunits = Math.sin(animal.radians) * animal.speed;
+            
+			
+			randomanimal = Math.floor(Math.random() * animals.length);
+						
+			if (loopCount % 200 == 0 && i == randomanimal) {
+				if (animals[i].speed == 1) {
+					speedMult = speedMult * Math.floor(Math.random() * 5) + 2;
+					console.log("Faster! "  + speedMult + "x " + animals[i].name);
+					console.log(randomanimal);
+					animals[i].speed *= speedMult;
+				}
+				else {
+					//speedMult = 1;
+					animals[i].speed /= animals[i].speed;
+					//animals[i].speed = animals[i].speed * speedMult;
+					console.log("Slower... " + animals[i].name);
+				}
+				loopCount = 1;
+				speedMult = 1;
+				console.log(randomanimal);
+			}
 
-            context.drawImage(images[i], animal.x, animal.y);
+			animals[i].radians = animals[i].angle * Math.PI / 180;
+			animals[i].xunits = Math.cos(animals[i].radians) * (animals[i].speed);
+			animals[i].yunits = Math.sin(animals[i].radians) * (animals[i].speed);
+
+            context.drawImage(images[i], animals[i].x, animals[i].y);
+			
         }       
     }
 
