@@ -3,39 +3,63 @@
 		{
 			"level": "1",
 			"background": "images/Farmyard-01.png",
-			"mode":"tappy",
-			"maxClicks": "3",
+			"mode":"removeall",
+			"maxClicks": "10",
 			"animals":[
 				{
 					"name" : "chicken",
+					"speed" : "1",
+					"scale" : "1"
+				},	
+			 	{
+					"name" : "cow",
+					"speed" : "1",
+					"scale" : "0.5"
+			    },
+				{
+					"name" : "disguised_pig",
+					"speed" : "1",
+					"scale" : "1"
+				},
+				{
+					"name" : "duck",
+					"speed" : "1",
+					"scale" : "1"
+				},
+				{
+					"name" : "horse",
+					"speed" : "1",
+					"scale" : "1"
+				},
+				{
+					"name" : "pig",
+					"speed" : "1",
+					"scale" : "1"
+				},
+				{
+					"name" : "sheep",
+					"speed" : "1",
+					"scale" : "1"
+				},
+				{
+					"name" : "turkey",
+					"speed" : "1",
+					"scale" : "1"
+				}
+			]
+		},
+		{
+			"level": "2",
+			"background": "images/Farmyard-01.png",
+			"mode":"removeall",
+			"maxClicks": "4",
+			"animals":[
+				{
+					"name" : "duck",
 					"speed" : "1"
 				},	
 				{
 					"name" : "cow",
-					"speed" : "1"
-				},
-				{
-					"name" : "disguised_pig",
-					"speed" : "1"
-				},
-				{
-					"name" : "duck",
-					"speed" : "1"
-				},
-				{
-					"name" : "horse",
-					"speed" : "1"
-				},
-				{
-					"name" : "pig",
-					"speed" : "1"
-				},
-				{
-					"name" : "sheep",
-					"speed" : "1"
-				},
-				{
-					"name" : "turkey",
 					"speed" : "1"
 				}
 			]
