@@ -1,6 +1,5 @@
 var animals = [];
 
-window.onload = function() {
     var t = window;
     var text;
     var attempts = 0;
@@ -30,12 +29,12 @@ window.onload = function() {
             return false;
         }); 
 
-        canvas.addEventListener("touchstart", function(e) {
-            console.log("touched")
-            var theCanvas = this;
-            canvasHit(e, theCanvas)
-            return false;
-        });
+        // canvas.addEventListener("touchstart", function(e) {
+        //     console.log("touched")
+        //     var theCanvas = this;
+        //     canvasHit(e, theCanvas)
+        //     return false;
+        // });
 
         setupGame();      
 		gameLoop();
@@ -43,34 +42,26 @@ window.onload = function() {
 
     function canvasHit(e, theCanvas)
     {        
-
+        e.preventDefault();
+        // var c = theCanvas.getContext('2d');
+ 
         attempts += 1;
 
-        // var c = theCanvas.getContext('2d');
-        if(e.which == 3){
-        
-        }
-        else
+        if(checkIfHit(e, theCanvas))
         {
-            attempts += 1;
-
-            if(checkIfHit(e, theCanvas))
-            {
-                score += 1;
-            }
-
-            if(attempts == 3)
-            {
-                if(score == 3) {
-                    playAudio("ohyeah.mp3");
-                }
-                else if(score == 0) {
-                    playAudio("nooo.ogg");
-                }
-                restartGame();
-            }
+            score += 1;
         }
-        
+
+        if(attempts == 3)
+        {
+            if(score == 3) {
+                playAudio("ohyeah.mp3");
+            }
+            else if(score == 0) {
+                playAudio("nooo.ogg");
+            }
+            restartGame();
+        }    
     }
 
     function gameLoop() {
@@ -135,7 +126,8 @@ window.onload = function() {
         }       
     }
 
-    function restartGame(){
+    function restartGame()
+    {
         score = 0;
         attempts = 0;
         animals=[];
@@ -143,7 +135,10 @@ window.onload = function() {
         //setupGame();
     }    
 
-    function setupGame() {
+    function setupGame()
+     {
+        $('#end').css('display', 'none');
+
         loopCount = 0;
 
         screenwidth = $(window).width();
@@ -165,7 +160,8 @@ window.onload = function() {
         });
     }
 
-    function drawAnimal(configAnimal, levelAnimal) {
+    function drawAnimal(configAnimal, levelAnimal)
+    {
         var angle = Math.floor(Math.random() * 360);
         var radians = angle * Math.PI / 180;
         var animal = {
@@ -187,8 +183,6 @@ window.onload = function() {
         animals.push(animal);
     }
 
-    // init();
-// }
 
 function playAudio(audiofile)
 {
@@ -216,8 +210,10 @@ function findPos(obj) {
 function checkIfHit(e, theCanvas)
 {
     var pos = findPos(theCanvas);
-    var mouseX = e.touches[0].pageX - pos.x;
-    var mouseY = e.touches[0].pageY - pos.y;
+    var mouseX = e.pageX - pos.x;
+    var mouseY = e.pageY - pos.y;
+    // var mouseX = e.touches[0].pageX - pos.x;
+    // var mouseY = e.touches[0].pageY - pos.y;
     var c = theCanvas.getContext('2d');
     // check reverse order as the last animal added to canvas is at the front
     for (var i = animals.length - 1; i >= 0; i--) {
