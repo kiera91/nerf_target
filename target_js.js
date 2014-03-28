@@ -1,6 +1,5 @@
 var animals = [];
 
-
 window.onload = function() {
     var t = window;
     var text;
@@ -44,6 +43,8 @@ window.onload = function() {
 
     function canvasHit(e, theCanvas)
     {        
+
+        attempts += 1;
 
         // var c = theCanvas.getContext('2d');
         if(e.which == 3){
