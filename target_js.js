@@ -155,10 +155,12 @@ function canvasHit(e, theCanvas)
 
     attempts += 1;
 
-    if(checkIfHit(e, theCanvas))
-    {
-        score += 1;
-    }
+
+    score += checkIfHit(e, theCanvas);
+    // if(checkIfHit(e, theCanvas))
+    // {
+    //     score += 1;
+    // }
 
     var allHit = false;
     if(config.levels[currentLevel].mode == "removeall")
@@ -244,6 +246,7 @@ function findPos(obj) {
 
 function checkIfHit(e, theCanvas)
 {
+    var hitCount = 0;
     var pos = findPos(theCanvas);
     // var mouseX = e.pageX - pos.x;
     // var mouseY = e.pageY - pos.y;
@@ -260,11 +263,13 @@ function checkIfHit(e, theCanvas)
             if (alpha != 0) {
                 animals[i].hit = true;
                 playAudio(animals[i].sound);
-                return true;
+                hitCount++;
             }
             else {
-                return false;
+                // return false;
             }
         }
     }
+
+    return hitCount;
 }

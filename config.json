@@ -4,7 +4,7 @@
 			"level": "1",
 			"background": "images/Farmyard-01.png",
 			"mode":"removeall",
-			"maxClicks": "10",
+			"maxClicks": "12",
 			"animals":[
 				{
 					"name" : "chicken",
@@ -56,11 +56,13 @@
 			"animals":[
 				{
 					"name" : "duck",
-					"speed" : "1"
+					"speed" : "1",
+					"scale" : "1"
 				},	
 				{
 					"name" : "cow",
-					"speed" : "1"
+					"speed" : "1",
+					"scale" : "1"
 				}
 			]
 		}
