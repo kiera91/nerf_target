@@ -28,7 +28,15 @@ window.onload = function() {
         $('#theCanvas').mousedown(function (e) {
             var theCanvas = this;
             canvasHit(e, theCanvas)
+            return false;
         }); 
+
+        canvas.addEventListener("touchstart", function(e) {
+            console.log("touched")
+            var theCanvas = this;
+            canvasHit(e, theCanvas)
+            return false;
+        });
 
         setupGame();      
 		gameLoop();
@@ -37,8 +45,12 @@ window.onload = function() {
     function canvasHit(e, theCanvas)
     {        
         // var c = theCanvas.getContext('2d');
-
-        attempts += 1;
+        if(e.which == 3){
+        
+        }
+        else
+        {
+            attempts += 1;
 
         if(checkIfHit(e, theCanvas))
         {
@@ -55,6 +67,8 @@ window.onload = function() {
             }
             restartGame();
         }
+        }
+        
     }
 
     function gameLoop() {
@@ -199,8 +213,8 @@ function findPos(obj) {
 function checkIfHit(e, theCanvas)
 {
     var pos = findPos(theCanvas);
-    var mouseX = e.pageX - pos.x;
-    var mouseY = e.pageY - pos.y;
+    var mouseX = e.touches[0].pageX - pos.x;
+    var mouseY = e.touches[0].pageY - pos.y;
     var c = theCanvas.getContext('2d');
     // check reverse order as the last animal added to canvas is at the front
     for (var i = animals.length - 1; i >= 0; i--) {
