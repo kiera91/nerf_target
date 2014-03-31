@@ -20,20 +20,21 @@ var gameRunning = false;
 function init()
 {
     $('#beginning').css('display', 'none');
+    console.log('')
     context.canvas.height = screenheight;
     context.canvas.width = screenwidth      
 
-    // $('#theCanvas').mousedown(function (e) {
-    //     var theCanvas = this;
-    //     canvasHit(e, theCanvas)
-    //     return false;
-    // }); 
-
-    canvas.addEventListener("touchstart", function(e) {
-        console.log("touched")
+    $('#theCanvas').mousedown(function (e) {
         var theCanvas = this;
         canvasHit(e, theCanvas)
-    });
+        return false;
+    }); 
+
+    // canvas.addEventListener("touchstart", function(e) {
+    //     console.log("touched")
+    //     var theCanvas = this;
+    //     canvasHit(e, theCanvas)
+    // });
 
     $.getJSON("config.json", function(json) {
         config = json;
@@ -42,9 +43,14 @@ function init()
     });
 }
 
-function setupGame()
+function setupGame(action)
  {
     $('#end').css('display', 'none');
+
+    if(action == "next")
+    {
+        currentLevel = currentLevel + 1;
+    }
 
     loopCount = 0;
 
@@ -248,10 +254,10 @@ function checkIfHit(e, theCanvas)
 {
     var hitCount = 0;
     var pos = findPos(theCanvas);
-    // var mouseX = e.pageX - pos.x;
-    // var mouseY = e.pageY - pos.y;
-    var mouseX = e.touches[ e.touches.length -1 ].pageX - pos.x;
-    var mouseY = e.touches[ e.touches.length -1 ].pageY - pos.y;
+    var mouseX = e.pageX - pos.x;
+    var mouseY = e.pageY - pos.y;
+    // var mouseX = e.touches[ e.touches.length -1 ].pageX - pos.x;
+    // var mouseY = e.touches[ e.touches.length -1 ].pageY - pos.y;
     var c = theCanvas.getContext('2d');
     // check reverse order as the last animal added to canvas is at the front
     for (var i = animals.length - 1; i >= 0; i--) {

@@ -6,22 +6,80 @@ body {
 		background-size:cover;
       }
 
-#beginning 
+#beginning, #end
 {
-	/*display:none;*/
 	margin-left: 40%;
 	margin-top: 10%;
-	background:#FF0000;
+	background:#000000;
 	width:500px;
 	height:300px;
+	border-radius:15px;
+	border:5px solid black;
 }
 
 #end 
 {
 	display:none;
-	margin-left: 40%;
-	margin-top: 10%;
-	background:#FF0000;
-	width:500px;
-	height:300px;
 }
+
+h1
+{
+	color:#FFFFFF;
+	margin-left: 25%;
+}
+
+button
+{
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:3px solid black;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;	
+	font-family:arial;
+	font-size:17px;
+	padding:16px 31px;
+	width:200px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+	margin-left:27%;
+}
+
+#beginning #go 
+{
+	background-color:rgb(159, 204, 72 );
+}
+
+#beginning #go:hover {
+	background-color:#5cbf2a;
+}
+
+#end #retry 
+{
+	background-color:rgb(251, 176, 59);
+}
+
+#end #retry:hover {
+	background-color:#5cbf2a;
+}
+
+#end #next 
+{
+	background-color:rgb(128, 205, 232);
+}
+
+#end #next:hover {
+	background-color:rgb(0, 113, 188);
+}
+
+#end #quit 
+{
+	background-color:rgb(159, 204, 72);
+}
+
+#end #quit:hover {
+	background-color:#5cbf2a;
+}
+
+

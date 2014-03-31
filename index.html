@@ -14,12 +14,14 @@
 
 <div id="beginning">
 	<h1>Moomooomoooo</h1>
-	<button onclick="init()">Go</button>
+	<button id="go" onclick="init()">Go</button>
 </div>
 
 <div id="end">
 	<h1>YAY</h1>
-	<button onclick="setupGame()">Go</button>
+	<button id="retry" onclick="setupGame('retry')">Retry</button><br>
+	<button id="next" onclick="setupGame('next')">Next Level</button><br>
+	<button id="quit" onclick="setupGame()">Quit</button>
 </div>
 
 <canvas id="theCanvas"></canvas>
